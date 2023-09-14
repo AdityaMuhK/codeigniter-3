@@ -87,12 +87,12 @@
     <div class="container">
         <div class="card">
             <h2>Login Form</h2>
-            <form>
-                <label for="username">Username</label>
-                <input type="text" id="username" placeholder="Enter your username">
+            <form action="<?php echo base_url(); ?>Auth/aksi_login" method="post">
+                <label for="email">Email</label>
+                <input type="text" id="email" placeholder="Enter your email" name="email">
 
                 <label for="password">Password</label>
-                <input type="password" id="password" placeholder="Enter your password">
+                <input type="password" id="password" placeholder="Enter your password" name="password">
 
                 <button type="submit">Login</button>
             </form>
