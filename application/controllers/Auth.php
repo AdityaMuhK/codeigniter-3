@@ -22,7 +22,7 @@ class Auth extends CI_Controller {
 		$query 		= $this->m_model->getwhere('admin', $data);
 		$result		= $query->row_array();
 
-		if (!empty($result) && ($password) === $result['password']) {
+		if (!empty($result) && md5($password) === $result['password']) {
 			$data = [
 				'logged_in'		=> TRUE,
 				'email'			=> $result['email'],

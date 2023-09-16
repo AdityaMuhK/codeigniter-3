@@ -77,28 +77,28 @@
                     <div class="bg-blue-400 border p-6 rounded-lg relative">
                         <i class="fas fa-door-closed text-gray-600 text-6xl absolute right-4 top-9"></i>
                         <p class="text-white mb-2">Jumlah Kelas</p>
-                        <p class="text-white text-2xl font-bold">6</p>
+                        <p class="text-white text-2xl font-bold"><?php echo $kelas ?></p>
                     </div>
 
                     <!-- Card 2 -->
                     <div class="bg-blue-400 border p-6 rounded-lg relative">
                         <i class="fas fa-file-invoice text-gray-600 text-6xl absolute right-4 top-9"></i>
                         <p class="text-white mb-2">Jumlah Mapel</p>
-                        <p class="text-white text-2xl font-bold">9</p>
+                        <p class="text-white text-2xl font-bold"><?php echo $mapel ?></p>
                     </div>
 
                     <!-- Card 3 -->
                     <div class="bg-blue-400 border p-6 rounded-lg relative">
                         <i class="fas fa-user text-gray-600 text-6xl absolute right-4 top-9"></i>
                         <p class="text-white mb-2">Jumlah Siswa</p>
-                        <p class="text-white text-2xl font-bold">4</p>
+                        <p class="text-white text-2xl font-bold"><?php echo $siswa ?></p>
                     </div>
 
                     <!-- Card 4 -->
                     <div class="bg-blue-400 border p-6 rounded-lg relative">
                         <i class="fas fa-user-tie text-gray-600 text-6xl absolute right-4 top-9"></i>
                         <p class="text-white mb-2">Jumlah Guru</p>
-                        <p class="text-white text-2xl font-bold">10</p>
+                        <p class="text-white text-2xl font-bold"><?php echo $guru ?></p>
                     </div>
                 </div>
             </div>

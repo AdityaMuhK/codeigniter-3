@@ -62,8 +62,7 @@
                                 Jenjang</button>
                             <a href="<?php echo base_url('admin/tambah_siswa') ?>"
                                 class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"><i
-                                    class="fas fa-plus mr-2"></i> Tambah</a
-                                href="<?php echo base_url('admin/siswa') ?>">
+                                    class="fas fa-plus mr-2"></i> Tambah</a>
                         </div>
                     </div>
                     <table class="min-w-full">
@@ -99,15 +98,15 @@
                                         <?php echo tampil_full_kelas_byid($row->id_kelas) ?>
                                     </td>
                                     <td class="border border-black p-2 border-4">
-    <a href="<?php echo base_url('admin/ubah_siswa') ?>"
-        class="bg-blue-300 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded mb-2">
-        Ubah
-    </a>
-    <button onClick="hapus(<?php echo $row->id_siswa; ?>)"
-        class="bg-red-400 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">
-        Hapus
-    </button>
-</td>
+                                        <a href="<?php echo base_url('admin/ubah_siswa/').$row->id_siswa ?>"
+                                            class="bg-blue-300 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded mb-2">
+                                            Ubah
+                                        </a>
+                                        <button onClick="hapus(<?php echo $row->id_siswa; ?>)"
+                                            class="bg-red-400 hover:bg-red-600 text-white font-bold py-2 px-4 rounded ml-2">
+                                            Hapus
+                                        </button>
+                                    </td>
 
 
                                 </tr>

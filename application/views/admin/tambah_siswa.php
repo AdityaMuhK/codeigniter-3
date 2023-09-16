@@ -35,8 +35,8 @@
             <div class="bg-white p-6 rounded-lg shadow-lg contrast-50">
                 <form action="<?php echo base_url('admin/aksi_tambah_siswa') ?>" enctype="multipart/form-data" method="POST" class="grid grid-cols-2 gap-4">
                     <div class="mb-4 col-span-1">
-                        <label for="nama_siswa" class="block text-gray-700 font-bold mb-2">Nama Siswa</label>
-                        <input type="text" id="nama_siswa" name="nama_siswa"
+                        <label for="nama" class="block text-gray-700 font-bold mb-2">Nama Siswa</label>
+                        <input type="text" id="nama" name="nama"
                             class="w-full border border-gray-300 p-2 rounded-lg" required>
                     </div>
                     <div class="mb-4 col-span-1">

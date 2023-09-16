@@ -33,40 +33,50 @@
 
         <div class="my-8 mx-4"> <!-- Tambahkan margin di sini -->
             <div class="bg-white p-6 rounded-lg shadow-lg contrast-50">
-                <form action="<?php echo base_url('admin/aksi_tambah_siswa') ?>" enctype="multipart/form-data" method="POST" class="grid grid-cols-2 gap-4">
-                    <div class="mb-4 col-span-1">
-                        <label for="nama_siswa" class="block text-gray-700 font-bold mb-2">Nama Siswa</label>
-                        <input type="text" id="nama_siswa" name="nama_siswa"
-                            class="w-full border border-gray-300 p-2 rounded-lg" required>
-                    </div>
-                    <div class="mb-4 col-span-1">
-                        <label for="nisn" class="block text-gray-700 font-bold mb-2">NISN</label>
-                        <input type="text" id="nisn" name="nisn" class="w-full border border-gray-300 p-2 rounded-lg"
-                            required>
-                    </div>
-                    <div class="mb-4 col-span-1">
-                        <label for="gender" class="block text-gray-700 font-bold mb-2">Gender</label>
-                        <select id="gender" name="gender" class="w-full border border-gray-300 p-2 rounded-lg" required>
-                            <option value="Laki-laki">Laki-laki</option>
-                            <option value="Perempuan">Perempuan</option>
-                        </select>
-                    </div>
-                    <div class="mb-4 col-span-1">
-                        <label for="kelas" class="block text-gray-700 font-bold mb-2">Kelas</label>
-                        <select id="kelas" name="kelas" class="w-full border border-gray-300 p-2 rounded-lg" required>
-                            <option selected>Pilih Kelas</option>
-                            <?php foreach($kelas as $row): ?>
-                            <option value="<?php echo $row->id ?>">
-                                <?php echo $row->tingkat_kelas.' '.$row->jurusan_kelas ?>
-                            </option>
-                            <?php endforeach ?>
-                        </select>
-                    </div>
-                    <button type="submit"
-                        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded col-span-2">
-                        Ubah Siswa
-                    </button>
-                </form>
+                <?php foreach ($siswa as $data_siswa): ?>
+                    <form action="<?php echo base_url('admin/aksi_ubah_siswa') ?>" enctype="multipart/form-data"
+                        method="POST" class="grid grid-cols-2 gap-4">
+                        <input name="id_siswa" type="hidden" value="<?php echo $data_siswa->id_siswa ?>">
+                        <div class="mb-4 col-span-1">
+                            <label for="nama" class="block text-gray-700 font-bold mb-2">Nama Siswa</label>
+                            <input type="text" id="nama" name="nama"
+                                class="w-full border border-gray-300 p-2 rounded-lg"
+                                value="<?php echo $data_siswa->nama_siswa ?>" required>
+                        </div>
+                        <div class="mb-4 col-span-1">
+                            <label for="nisn" class="block text-gray-700 font-bold mb-2">NISN</label>
+                            <input type="text" id="nisn" name="nisn" class="w-full border border-gray-300 p-2 rounded-lg"
+                                value="<?php echo $data_siswa->nisn ?>" required>
+                        </div>
+                        <div class="mb-4 col-span-1">
+                            <label for="gender" class="block text-gray-700 font-bold mb-2">Gender</label>
+                            <select id="gender" name="gender" class="w-full border border-gray-300 p-2 rounded-lg" required>
+                                <option selected value="<?php echo $data_siswa->gender ?>">
+                                    <?php echo $data_siswa->gender ?>
+                                </option>
+                                <option value="Laki-laki">Laki-laki</option>
+                                <option value="Perempuan">Perempuan</option>
+                            </select>
+                        </div>
+                        <div class="mb-4 col-span-1">
+                            <label for="kelas" class="block text-gray-700 font-bold mb-2">Kelas</label>
+                            <select id="kelas" name="kelas" class="w-full border border-gray-300 p-2 rounded-lg" required>
+                                <option selected value="<?php $data_siswa->id_kelas ?>">
+                                    <?php echo tampil_full_kelas_byid($data_siswa->id_kelas) ?>
+                                </option>
+                                <?php foreach ($kelas as $row): ?>
+                                    <option value="<?php echo $row->id ?>">
+                                        <?php echo $row->tingkat_kelas . ' ' . $row->jurusan_kelas ?>
+                                    </option>
+                                <?php endforeach ?>
+                            </select>
+                        </div>
+                        <button type="submit"
+                            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded col-span-2">
+                            Ubah Siswa
+                        </button>
+                    </form>
+                <?php endforeach ?>
             </div>
         </div>
     </div>

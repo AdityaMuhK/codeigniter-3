@@ -16,7 +16,11 @@ class Admin extends CI_Controller
 	// admin
 	public function index()
 	{
-		$this->load->view('admin/index');
+		$data['mapel'] = $this->m_model->get_data('mapel')->num_rows();
+		$data['siswa'] = $this->m_model->get_data('siswa')->num_rows();
+		$data['guru'] = $this->m_model->get_data('guru')->num_rows();
+		$data['kelas'] = $this->m_model->get_data('kelas')->num_rows();
+		$this->load->view('admin/index', $data);
 	}
 	// siswa 
 	public function siswa()
@@ -37,10 +41,33 @@ class Admin extends CI_Controller
 		$this->load->view('admin/tambah_siswa', $data);
 	}
 	// ubah 
-	public function ubah_siswa()
+	public function ubah_siswa($id)
 	{
+		$data['siswa'] = $this->m_model->get_by_id('siswa', 'id_siswa', $id)->result();
 		$data['kelas'] = $this->m_model->get_data('kelas')->result();
 		$this->load->view('admin/ubah_siswa', $data);
+	}
+	// aksi ubah
+	public function aksi_ubah_siswa()
+	{
+		$data = array (
+			'nama_siswa' => $this->input->post('nama'),
+			'nisn' => $this->input->post('nisn'),
+			'gender' => $this->input->post('gender'),
+			'id_kelas' => $this->input->post('kelas'),
+	);
+		$eksekusi=$this->m_model->ubah_data
+		('siswa', $data, array('id_siswa'=>$this->input->post('id_siswa')));
+		if($eksekusi)
+		{
+			$this->session->set_flashdata('sukses', 'berhasil');
+			redirect(base_url('admin/siswa'));
+		} 
+		else
+		{
+			$this->session->set_flashdata('error', 'gagal..');
+			redirect(base_url('admin/ubah_siswa/'.$this->input-post('id_siswa')));
+		}
 	}
 	// aksi tambah
 	public function aksi_tambah_siswa()
