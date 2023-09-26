@@ -24,6 +24,9 @@
         <a href="<?php echo base_url('admin/guru') ?>" class="text-white hover:bg-blue-700 p-2 rounded-lg">
             <i class="fas fa-chalkboard mr-2"></i> Guru
         </a>
+        <a href="<?php echo base_url('admin/akun'); ?>" class="text-white hover:bg-blue-700 p-2 rounded-lg">
+            <i class="fas fa-user-circle mr-2"></i> Akun
+        </a>
     </aside>
 
     <div class="flex-1 flex flex-col overflow-hidden">
@@ -33,11 +36,12 @@
 
         <div class="my-8 mx-4"> <!-- Tambahkan margin di sini -->
             <div class="bg-white p-6 rounded-lg shadow-lg contrast-50">
-                <form action="<?php echo base_url('admin/aksi_tambah_siswa') ?>" enctype="multipart/form-data" method="POST" class="grid grid-cols-2 gap-4">
+                <form action="<?php echo base_url('admin/aksi_tambah_siswa') ?>" enctype="multipart/form-data"
+                    method="POST" class="grid grid-cols-2 gap-4">
                     <div class="mb-4 col-span-1">
                         <label for="nama" class="block text-gray-700 font-bold mb-2">Nama Siswa</label>
-                        <input type="text" id="nama" name="nama"
-                            class="w-full border border-gray-300 p-2 rounded-lg" required>
+                        <input type="text" id="nama" name="nama" class="w-full border border-gray-300 p-2 rounded-lg"
+                            required>
                     </div>
                     <div class="mb-4 col-span-1">
                         <label for="nisn" class="block text-gray-700 font-bold mb-2">NISN</label>
@@ -55,12 +59,18 @@
                         <label for="kelas" class="block text-gray-700 font-bold mb-2">Kelas</label>
                         <select id="kelas" name="kelas" class="w-full border border-gray-300 p-2 rounded-lg" required>
                             <option selected>Pilih Kelas</option>
-                            <?php foreach($kelas as $row): ?>
-                            <option value="<?php echo $row->id ?>">
-                                <?php echo $row->tingkat_kelas.' '.$row->jurusan_kelas ?>
-                            </option>
+                            <?php foreach ($kelas as $row): ?>
+                                <option value="<?php echo $row->id ?>">
+                                    <?php echo $row->tingkat_kelas . ' ' . $row->jurusan_kelas ?>
+                                </option>
                             <?php endforeach ?>
                         </select>
+                    </div>
+                    <div class="mb-4 col-span-1">
+                        <label for="foto" class="block text-gray-700 font-bold mb-2">Foto Siswa</label>
+                        <input type="file" id="foto" name="foto" accept="image/*"
+                            class="w-full border border-gray-300 p-2 rounded-lg" required>
+                        <small class="text-gray-500">Pilih file gambar (format: JPG, PNG, JPEG, GIF, dll.)</small>
                     </div>
                     <button type="submit"
                         class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded col-span-2">

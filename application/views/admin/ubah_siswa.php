@@ -24,6 +24,9 @@
         <a href="<?php echo base_url('admin/guru') ?>" class="text-white hover:bg-blue-700 p-2 rounded-lg">
             <i class="fas fa-chalkboard mr-2"></i> Guru
         </a>
+        <a href="<?php echo base_url('admin/akun'); ?>" class="text-white hover:bg-blue-700 p-2 rounded-lg">
+            <i class="fas fa-user-circle mr-2"></i> Akun
+        </a>
     </aside>
 
     <div class="flex-1 flex flex-col overflow-hidden">
@@ -39,8 +42,7 @@
                         <input name="id_siswa" type="hidden" value="<?php echo $data_siswa->id_siswa ?>">
                         <div class="mb-4 col-span-1">
                             <label for="nama" class="block text-gray-700 font-bold mb-2">Nama Siswa</label>
-                            <input type="text" id="nama" name="nama"
-                                class="w-full border border-gray-300 p-2 rounded-lg"
+                            <input type="text" id="nama" name="nama" class="w-full border border-gray-300 p-2 rounded-lg"
                                 value="<?php echo $data_siswa->nama_siswa ?>" required>
                         </div>
                         <div class="mb-4 col-span-1">

@@ -27,13 +27,18 @@
         <a href="<?php echo base_url('admin/guru') ?>" class="text-white hover:bg-blue-700 p-2 rounded-lg">
             <i class="fas fa-chalkboard mr-2"></i> Guru
         </a>
+        <a href="<?php echo base_url('admin/akun'); ?>" class="text-white hover:bg-blue-700 p-2 rounded-lg">
+            <i class="fas fa-user-circle mr-2"></i> Akun
+        </a>
     </aside>
 
     <div class="flex-1 flex flex-col overflow-hidden">
         <header class="flex justify-between items-center p-4 bg-white border-b-2 border-gray-200">
             <h1 class="text-4xl">Tabel</h1>
             <div class="flex items-center space-x-2">
-                <a href="#" class="text-gray-600 hover:text-blue-600">
+                <a href="<?php echo base_url(
+                    'auth/logout'
+                ); ?>" class="text-gray-600 hover:text-blue-600">
                     Logout
                 </a>
             </div>
@@ -69,6 +74,7 @@
                         <thead>
                             <tr>
                                 <th class="text-left border border-black p-2 border-4">No</th>
+                                <th class="text-left border border-black p-2 border-4">Foto Siswa</th>
                                 <th class="text-left border border-black p-2 border-4">Nama Siswa</th>
                                 <th class="text-left border border-black p-2 border-4">NISN</th>
                                 <th class="text-left border border-black p-2 border-4">Gender</th>
@@ -86,6 +92,9 @@
                                         <?php echo $no ?>
                                     </td>
                                     <td class="border border-black p-2 border-4">
+                                        <img src="<?php echo base_url('images/siswa/'.$row->foto) ?>" width="50" height="50" alt="Foto Siswa">
+                                    </td>
+                                    <td class="border border-black p-2 border-4">
                                         <?php echo $row->nama_siswa ?>
                                     </td>
                                     <td class="border border-black p-2 border-4">
@@ -98,7 +107,7 @@
                                         <?php echo tampil_full_kelas_byid($row->id_kelas) ?>
                                     </td>
                                     <td class="border border-black p-2 border-4">
-                                        <a href="<?php echo base_url('admin/ubah_siswa/').$row->id_siswa ?>"
+                                        <a href="<?php echo base_url('admin/ubah_siswa/') . $row->id_siswa ?>"
                                             class="bg-blue-300 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded mb-2">
                                             Ubah
                                         </a>
