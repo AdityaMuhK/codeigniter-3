@@ -25,6 +25,9 @@
             <a href="<?php echo base_url('admin/guru') ?>" class="text-white hover:bg-blue-700 p-2 rounded-lg">
                 <i class="fas fa-chalkboard mr-2"></i> Guru
             </a>
+            <a href="<?php echo base_url('keuangan/index') ?>" class="text-white hover:bg-blue-700 p-2 rounded-lg">
+                <i class="fas fa-coins mr-2"></i> Keuangan
+            </a>
             <a href="<?php echo base_url('admin/akun'); ?>" class="text-white hover:bg-blue-700 p-2 rounded-lg">
                 <i class="fas fa-user-circle mr-2"></i> Akun
             </a>

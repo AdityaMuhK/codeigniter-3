@@ -24,6 +24,9 @@
         <a href="<?php echo base_url('admin/guru') ?>" class="text-white hover:bg-blue-700 p-2 rounded-lg">
             <i class="fas fa-chalkboard mr-2"></i> Guru
         </a>
+        <a href="<?php echo base_url('keuangan/index') ?>" class="text-white hover:bg-blue-700 p-2 rounded-lg">
+            <i class="fas fa-coins mr-2"></i> Keuangan
+        </a>
         <a href="<?php echo base_url('admin/akun'); ?>" class="text-white hover:bg-blue-700 p-2 rounded-lg">
             <i class="fas fa-user-circle mr-2"></i> Akun
         </a>
@@ -72,6 +75,12 @@
                                     </option>
                                 <?php endforeach ?>
                             </select>
+                        </div>
+                        <div class="mb-4 col-span-1">
+                            <label for="foto" class="block text-gray-700 font-bold mb-2">Foto Siswa</label>
+                            <input type="file" id="foto" name="foto" accept="image/*"
+                                class="w-full border border-gray-300 p-2 rounded-lg" required>
+                            <small class="text-gray-500">Pilih file gambar (format: JPG, PNG, JPEG, GIF, dll.)</small>
                         </div>
                         <button type="submit"
                             class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded col-span-2">
