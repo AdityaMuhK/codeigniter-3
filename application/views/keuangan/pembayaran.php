@@ -81,7 +81,7 @@
                                         <?php echo $row->jenis_pembayaran ?>
                                     </td>
                                     <td class="border border-black p-2 border-4">
-                                        <?php echo 'Rp '.$row->total_pembayaran?>
+                                        <?php echo convRupiah($row->total_pembayaran)?>
                                     </td>
                                     <td class="border border-black p-2 border-4">
                                         <a href="<?php echo base_url('keuangan/ubah_pembayaran/') . $row->id ?>"

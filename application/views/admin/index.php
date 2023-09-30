@@ -26,9 +26,22 @@
         <a href="<?php echo base_url('admin/guru') ?>" class="text-white hover:bg-blue-700 p-2 rounded-lg">
             <i class="fas fa-chalkboard mr-2"></i> Guru
         </a>
-        <a href="<?php echo base_url('keuangan/index') ?>" class="text-white hover:bg-blue-700 p-2 rounded-lg">
-            <i class="fas fa-coins mr-2"></i> Keuangan
-        </a>
+        <!-- Keuangan Dropdown -->
+        <div class="relative group">
+            <button class="text-white hover:bg-blue-700 p-2 rounded-lg flex items-center focus:outline-none">
+                <i class="fas fa-coins mr-2"></i> Keuangan <i class="fas fa-chevron-down ml-auto"></i>
+            </button>
+            <ul class="absolute hidden mt-2 bg-blue-600 group-hover:block">
+                <li>
+                    <a href="<?php echo base_url('keuangan/index') ?>"
+                        class="block px-4 py-2 text-white hover:bg-blue-700">Keuangan</a>
+                </li>
+                <li>
+                    <a href="<?php echo base_url('keuangan/pembayaran') ?>"
+                        class="block px-4 py-2 text-white hover:bg-blue-700">Pembayaran</a>
+                </li>
+            </ul>
+        </div>
         <a href="<?php echo base_url('admin/akun'); ?>" class="text-white hover:bg-blue-700 p-2 rounded-lg">
             <i class="fas fa-user-circle mr-2"></i> Akun
         </a>
@@ -105,6 +118,18 @@
         </main>
 
     </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Mengambil elemen dropdown
+            const dropdown = document.querySelector('.relative.group');
+
+            // Menggunakan event listener untuk menampilkan/menyembunyikan dropdown
+            dropdown.addEventListener('click', function () {
+                const menu = this.querySelector('ul');
+                menu.classList.toggle('hidden');
+            });
+        });
+    </script>
 </body>
 
 </html>
