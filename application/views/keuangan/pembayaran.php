@@ -8,7 +8,6 @@
     <title>Pembayaran</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
-
 </head>
 
 <body class="flex h-screen bg-gray-100">
@@ -48,14 +47,24 @@
                 <h3></h3>
                 <!-- Table -->
                 <div class="bg-white p-6 rounded-lg shadow-2xl">
-                    <div class="flex justify-end mt-4">
+                    <div class="flex justify-end my-4">
 
                         <div class="flex space-x-4">
                             <a href="<?php echo base_url('keuangan/tambah_pembayaran') ?>"
                                 class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"><i
                                     class="fas fa-plus mr-2"></i> Tambah</a>
+
+                            <!-- Tombol Export -->
+                            <a href="<?php echo base_url('keuangan/export') ?>"
+                                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"><i
+                                    class="fas fa-file-export mr-2"></i> Export</a>
+                                    <!-- Tombol Import -->
+                            <button id="importButton"
+                                class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"><i
+                                    class="fas fa-file-import mr-2"></i> Import</button>
                         </div>
                     </div>
+
                     <table class="min-w-full">
                         <thead>
                             <tr>
@@ -81,7 +90,7 @@
                                         <?php echo $row->jenis_pembayaran ?>
                                     </td>
                                     <td class="border border-black p-2 border-4">
-                                        <?php echo convRupiah($row->total_pembayaran)?>
+                                        <?php echo convRupiah($row->total_pembayaran) ?>
                                     </td>
                                     <td class="border border-black p-2 border-4">
                                         <a href="<?php echo base_url('keuangan/ubah_pembayaran/') . $row->id ?>"
@@ -102,6 +111,35 @@
 
                     </table>
                 </div>
+                <!-- Modal -->
+                <div id="importModal" class="fixed inset-0 flex items-center justify-center z-50 hidden">
+                    <div class="modal-overlay absolute w-full h-full bg-gray-900 opacity-50"></div>
+
+                    <div
+                        class="modal-container bg-white w-11/12 md:max-w-md mx-auto rounded shadow-lg z-50 overflow-y-auto animate__animated animate__fadeIn">
+                        <div class="modal-content py-4 text-left px-6">
+                            <!-- Close Button -->
+                            <div class="flex justify-end items-center">
+                                <button type="button" class="text-3xl leading-none hover:text-gray-700"
+                                    onclick="closeModal()">
+                                    &times;
+                                </button>
+                            </div>
+                            <!-- Formulir Input File -->
+                            <form action="<?= base_url('keuangan/import') ?>" method="POST" enctype="multipart/form-data">
+                                <div class="my-4">
+                                    <input type="file" name="file" class="w-full py-2 px-3 border border-gray-300">
+                                </div>
+                                <!-- Tombol Kirim -->
+                                <button type="submit" name="import"
+                                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                                    Kirim
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <!-- tutup modal -->
             </div>
         </main>
     </div>
@@ -112,6 +150,22 @@
                 window.location.href = "<?php echo base_url('keuangan/hapus_pembayaran/') ?>" + id;
             }
         }
+    </script>
+    <!-- Script JavaScript untuk Menampilkan dan Menutup Modal -->
+    <script>
+        function openModal() {
+            document.getElementById('importModal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('importModal').classList.add('fadeOut');
+            setTimeout(function () {
+                document.getElementById('importModal').classList.add('hidden');
+                document.getElementById('importModal').classList.remove('fadeOut');
+            }, 300);
+        }
+
+        document.getElementById('importButton').addEventListener('click', openModal);
     </script>
 </body>
 
