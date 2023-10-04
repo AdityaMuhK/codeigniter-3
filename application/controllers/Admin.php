@@ -1,6 +1,9 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+
 class Admin extends CI_Controller
 {
 
@@ -142,10 +145,11 @@ class Admin extends CI_Controller
 		}
 
 	}
-	
-	
+
+
 	// hapus 
-	public function hapus_siswa($id){
+	public function hapus_siswa($id)
+	{
 		$siswa = $this->m_model->get_by_id('siswa', 'id_siswa', $id)->row();
 		if ($siswa) {
 			if ($siswa->foto !== 'User.png') {
@@ -213,6 +217,185 @@ class Admin extends CI_Controller
 			redirect(base_url('admin/akun'));
 		}
 	}
+
+	public function export()
+	{
+		$spreadsheet = new Spreadsheet();
+		$sheet = $spreadsheet->getActiveSheet();
+
+		$style_col = [
+			'font' => ['bold' => true],
+			'alignment' => [
+				'horizontal' =>
+					\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+				'vertical' =>
+					\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+			],
+			'borders' => [
+				'top' => [
+					'borderStyle' =>
+						\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+				],
+				'right' => [
+					'borderStyle' =>
+						\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+				],
+				'bottom' => [
+					'borderStyle' =>
+						\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+				],
+				'left' => [
+					'borderStyle' =>
+						\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+				],
+			],
+		];
+
+		$style_row = [
+			'font' => ['bold' => true],
+			'alignment' => [
+				'vertical' =>
+					\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+			],
+			'borders' => [
+				'top' => [
+					'borderStyle' =>
+						\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+				],
+				'right' => [
+					'borderStyle' =>
+						\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+				],
+				'bottom' => [
+					'borderStyle' =>
+						\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+				],
+				'left' => [
+					'borderStyle' =>
+						\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+				],
+			],
+		];
+
+		$sheet->setCellValue('A1', 'DATA SISWA'); // Change the title
+		$sheet->mergeCells('A1:F1'); // Merge cells for the title
+		$sheet
+			->getStyle('A1')
+			->getFont()
+			->setBold(true);
+
+		$sheet->setCellValue('A3', 'Foto'); // Add 'Foto' column
+		$sheet->setCellValue('B3', 'Nama Siswa');
+		$sheet->setCellValue('C3', 'NISN');
+		$sheet->setCellValue('D3', 'Gender');
+		$sheet->setCellValue('E3', 'Kelas');
+
+		$sheet->getStyle('A3')->applyFromArray($style_col);
+		$sheet->getStyle('B3')->applyFromArray($style_col);
+		$sheet->getStyle('C3')->applyFromArray($style_col);
+		$sheet->getStyle('D3')->applyFromArray($style_col);
+		$sheet->getStyle('E3')->applyFromArray($style_col);
+
+		// Get data from the "siswa" table
+		$data = $this->m_model->getDataSiswa();
+
+		$no = 1;
+		$numrow = 4;
+		foreach ($data as $data) {
+			// Get kelas from my_helper.php
+			$kelas = tampil_full_kelas_byid($data->id_kelas);
+
+			// Set a default photo if it's not available
+			$foto = 'User.png';
+			if (!empty($data->foto)) {
+				$foto = $data->foto;
+			}
+
+			$sheet->setCellValue('A' . $numrow, $foto); // Add 'foto' data
+			$sheet->setCellValue('B' . $numrow, $data->nama_siswa);
+			$sheet->setCellValue('C' . $numrow, $data->nisn);
+			$sheet->setCellValue('D' . $numrow, $data->gender);
+			$sheet->setCellValue('E' . $numrow, $kelas);
+
+			$sheet->getStyle('A' . $numrow)->applyFromArray($style_row);
+			$sheet->getStyle('B' . $numrow)->applyFromArray($style_row);
+			$sheet->getStyle('C' . $numrow)->applyFromArray($style_row);
+			$sheet->getStyle('D' . $numrow)->applyFromArray($style_row);
+			$sheet->getStyle('E' . $numrow)->applyFromArray($style_row);
+
+			$no++;
+			$numrow++;
+		}
+
+		$sheet->getColumnDimension('A')->setWidth(20); // Adjust the width for 'foto'
+		$sheet->getColumnDimension('B')->setWidth(25);
+		$sheet->getColumnDimension('C')->setWidth(20);
+		$sheet->getColumnDimension('D')->setWidth(20);
+		$sheet->getColumnDimension('E')->setWidth(30);
+
+		$sheet->getDefaultRowDimension()->setRowHeight(-1);
+
+		$sheet
+			->getPageSetup()
+			->setOrientation(
+				\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE
+			);
+
+		$sheet->setTitle('LAPORAN DATA SISWA');
+
+		header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+		header('Content-Disposition: attachment; filename="SISWA.xlsx"');
+		header('Cache-Control: max-age=0');
+
+		$writer = new Xlsx($spreadsheet);
+		$writer->save('php://output');
+	}
+
+	public function import_siswa()
+	{
+		if (isset($_FILES["file"]["name"])) {
+			$path = $_FILES["file"]["tmp_name"];
+			$object = PhpOffice\PhpSpreadsheet\IOFactory::load($path);
+			foreach ($object->getWorksheetIterator() as $worksheet) {
+				$highestRow = $worksheet->getHighestRow();
+				$highestColumn = $worksheet->getHighestColumn();
+				for ($row = 2; $row <= $highestRow; $row++) {
+					$nama_siswa = $worksheet->getCellByColumnAndRow(1, $row)->getValue();
+					$nisn = $worksheet->getCellByColumnAndRow(2, $row)->getValue();
+					$gender = $worksheet->getCellByColumnAndRow(3, $row)->getValue();
+					$kelas = $worksheet->getCellByColumnAndRow(4, $row)->getValue();
+					$foto = $_FILES["foto"]["name"][$row - 2]; // Ambil nama file foto
+
+					// Simpan foto
+					$config['upload_path'] = './path/to/upload/directory/'; // Sesuaikan dengan direktori penyimpanan foto
+					$config['allowed_types'] = 'jpg|jpeg|png|gif'; // Sesuaikan dengan tipe file yang diizinkan
+					$config['file_name'] = $foto;
+
+					$this->load->library('upload', $config);
+
+					if ($this->upload->do_upload('foto')) {
+						$get_id_by_nisn = $this->m_model->get_by_nisn($nisn);
+						$data = array(
+							'nama_siswa' => $nama_siswa,
+							'nisn' => $nisn,
+							'gender' => $gender,
+							'kelas' => $kelas,
+							'foto' => $foto,
+							// Simpan nama file foto ke dalam database
+							'id_siswa' => $get_id_by_nisn
+						);
+						$this->m_model->tambah_data('siswa', $data);
+					} else {
+						echo 'Gagal mengunggah foto';
+					}
+				}
+			}
+			redirect(base_url('admin/siswa'));
+		} else {
+			echo 'Invalid File';
+		}
+	}
+
 
 }
 ?>

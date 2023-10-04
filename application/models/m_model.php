@@ -48,7 +48,8 @@ class M_model extends CI_Model
         return $this->db->affected_rows();
     }
 
-    public function get_by_nisn($nisn) {
+    public function get_by_nisn($nisn)
+    {
         $this->db->select('id_siswa');
         $this->db->from('siswa');
         $this->db->where('nisn', $nisn);
@@ -61,5 +62,28 @@ class M_model extends CI_Model
             return false;
         }
     }
+    public function getDataPembayaran()
+    {
+        $this->db->select(
+            'pembayaran.id, pembayaran.jenis_pembayaran, pembayaran.total_pembayaran, siswa.nama_siswa, kelas.tingkat_kelas, kelas.jurusan_kelas'
+        );
+        $this->db->from('pembayaran');
+        $this->db->join(
+            'siswa',
+            'siswa.id_siswa = pembayaran.id_siswa',
+            'left'
+        );
+        $this->db->join('kelas', 'siswa.id_kelas = kelas.id', 'left');
+        $query = $this->db->get();
+
+        return $query->result();
+    }
+    public function getDataSiswa() {
+        // Assuming you are using some kind of database query
+        // Make sure to include id_kelas in your SELECT statement
+        $query = $this->db->query("SELECT id_siswa, nama_siswa, nisn, gender, id_kelas, foto FROM siswa");
+        return $query->result();
+    }
+
 }
 ?>

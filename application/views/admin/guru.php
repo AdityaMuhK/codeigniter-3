@@ -55,6 +55,18 @@
                     </div>
                 </div>
                 p
+                <script>
+                    document.addEventListener("DOMContentLoaded", function () {
+                        // Mengambil elemen dropdown
+                        const dropdown = document.querySelector('.relative.group');
+
+                        // Menggunakan event listener untuk menampilkan/menyembunyikan dropdown
+                        dropdown.addEventListener('click', function () {
+                            const menu = this.querySelector('ul');
+                            menu.classList.toggle('hidden');
+                        });
+                    });
+                </script>
 </body>
 
 </html>
