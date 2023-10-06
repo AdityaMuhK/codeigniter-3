@@ -78,12 +78,43 @@ class M_model extends CI_Model
 
         return $query->result();
     }
-    public function getDataSiswa() {
+    public function getDataSiswa()
+    {
         // Assuming you are using some kind of database query
         // Make sure to include id_kelas in your SELECT statement
         $query = $this->db->query("SELECT id_siswa, nama_siswa, nisn, gender, id_kelas, foto FROM siswa");
         return $query->result();
     }
 
+    public function getKelasByTingkatJurusan($tingkat_kelas, $jurusan_kelas)
+    {
+        $this->db->select('id');
+        $this->db->where('tingkat_kelas', $tingkat_kelas);
+        $this->db->where('jurusan_kelas', $jurusan_kelas);
+        $query = $this->db->get('kelas');
+
+        if ($query->num_rows() > 0) {
+            $row = $query->row();
+            return $row->id;
+        } else {
+            return false;
+        }
+    }
+
+    // Fungsi untuk mengambil nama mapel berdasarkan id_mapel
+    public function get_mapel_by_id($id_mapel)
+    {
+        // Gantilah 'mapel' dengan nama tabel mapel Anda
+        $this->db->select('nama_mapel');
+        $this->db->where('id', $id_mapel);
+        $query = $this->db->get('mapel');
+
+        // Periksa apakah query berhasil
+        if ($query->num_rows() > 0) {
+            return $query->row(); // Mengembalikan hasil query
+        } else {
+            return null; // Jika tidak ada data yang ditemukan
+        }
+    }
 }
 ?>

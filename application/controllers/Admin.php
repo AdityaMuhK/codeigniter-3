@@ -13,7 +13,7 @@ class Admin extends CI_Controller
 		$this->load->model('m_model');
 		$this->load->helper('my_helper');
 		$this->load->library('upload');
-		if ($this->session->userdata('logged_in') != true) {
+		if ($this->session->userdata('logged_in') != true || $this->session->userdata('role') != 'admin') {
 			redirect(base_url() . 'auth');
 		}
 	}
@@ -47,12 +47,6 @@ class Admin extends CI_Controller
 	{
 		$data['siswa'] = $this->m_model->get_data('siswa')->result();
 		$this->load->view('admin/siswa', $data);
-	}
-	// guru
-	public function guru()
-	{
-		$data['guru'] = $this->m_model->get_data('guru')->result();
-		$this->load->view('admin/guru', $data);
 	}
 	// tambah
 	public function tambah_siswa()
@@ -174,6 +168,149 @@ class Admin extends CI_Controller
 		}
 	}
 
+	// GURU
+	public function upload_img_guru($value)
+	{
+		$kode = round(microtime(true) * 1000);
+		$config['upload_path'] = './images/guru/';
+		$config['allowed_types'] = 'jpg|png|jpeg';
+		$config['max_size'] = '3000';
+		$config['fle_name'] = $kode;
+		$this->upload->initialize($config);
+		if (!$this->upload->do_upload($value)) {
+			return [false, ''];
+		} else {
+			$fn = $this->upload->data();
+			$nama = $fn['file_name'];
+			return [true, $nama];
+		}
+	}
+	// guru
+	public function guru()
+	{
+		$data['guru'] = $this->m_model->get_data('guru')->result();
+		$data['kelas'] = $this->m_model->get_data('kelas')->result();
+		$this->load->view('admin/guru', $data);
+	}
+	// tambah
+	public function tambah_guru()
+	{
+		$data['mapel'] = $this->m_model->get_data('mapel')->result();
+		$this->load->view('admin/tambah_guru', $data);
+	}
+	// ubah 
+	public function ubah_guru($id)
+	{
+		$data['guru'] = $this->m_model->get_by_id('guru', 'id_guru', $id)->result();
+		$data['mapel'] = $this->m_model->get_data('mapel')->result();
+		$this->load->view('admin/ubah_guru', $data);
+	}
+	// aksi ubah
+	public function aksi_ubah_guru()
+	{
+		$foto = $_FILES['foto']['name'];
+		$foto_temp = $_FILES['foto']['tmp_name'];
+
+		// Jika ada foto yang diunggah
+		if ($foto) {
+			$kode = round(microtime(true) * 1000);
+			$file_name = $kode . '_' . $foto;
+			$upload_path = './images/guru/' . $file_name;
+
+			if (move_uploaded_file($foto_temp, $upload_path)) {
+				// Hapus foto lama jika ada
+				$old_file = $this->m_model->get_guru_foto_by_id($this->input->post('id_guru'));
+				if ($old_file && file_exists('./images/guru/' . $old_file)) {
+					unlink('./images/guru/' . $old_file);
+				}
+
+				$data = [
+					'foto' => $file_name,
+					'nama_guru' => $this->input->post('nama'),
+					'nik' => $this->input->post('nik'),
+					'gender' => $this->input->post('gender'),
+					'id_mapel' => $this->input->post('mapel'),
+				];
+			} else {
+				// Gagal mengunggah foto baru
+				redirect(base_url('admin/ubah_guru/' . $this->input->post('id_guru')));
+			}
+		} else {
+			// Jika tidak ada foto yang diunggah
+			$data = [
+				'nama_guru' => $this->input->post('nama'),
+				'nik' => $this->input->post('nik'),
+				'gender' => $this->input->post('gender'),
+				'id_mapel' => $this->input->post('mapel'),
+			];
+		}
+
+		// Eksekusi dengan model ubah_data
+		$eksekusi = $this->m_model->ubah_data('guru', $data, array('id_guru' => $this->input->post('id_guru')));
+
+		if ($eksekusi) {
+			redirect(base_url('admin/guru'));
+		} else {
+			redirect(base_url('admin/ubah_guru/' . $this->input->post('id_guru')));
+		}
+	}
+	// aksi tambah
+	public function aksi_tambah_guru()
+	{
+		$foto = $this->upload_img_guru('foto');
+		if ($foto[0] == false) {
+			$data = [
+				'foto' => 'User.png',
+				'nama_guru' => $this->input->post('nama'),
+				'nik' => $this->input->post('nik'),
+				'gender' => $this->input->post('gender'),
+				'id_mapel' => $this->input->post('mapel'),
+			];
+
+			$this->m_model->tambah_data('guru', $data);
+			redirect(base_url('admin/guru'));
+		} else {
+			$data = [
+				'foto' => $foto[1],
+				'nama_guru' => $this->input->post('nama'),
+				'nik' => $this->input->post('nik'),
+				'gender' => $this->input->post('gender'),
+				'id_mapel' => $this->input->post('mapel'),
+			];
+
+			$this->m_model->tambah_data('guru', $data);
+			redirect(base_url('admin/guru'));
+		}
+
+	}
+
+
+	// hapus 
+	public function hapus_guru($id)
+	{
+		$guru = $this->m_model->get_by_id('guru', 'id_guru', $id)->row();
+		if ($guru) {
+			if ($guru->foto !== 'User.png') {
+				$file_path = './images/guru' . $guru->foto;
+
+				if (file_exists($file_path)) {
+					if (unlink($file_path)) {
+						$this->m_model->delete('guru', 'id_guru', $id);
+						redirect(base_url('admin/guru'));
+					} else {
+						echo "Gagal menghapus File.";
+					}
+				} else {
+					echo "File tidak ditemukan.";
+				}
+			} else {
+				$this->m_model->delete('guru', 'id_guru', $id);
+				redirect(base_url('admin/guru'));
+			}
+		} else {
+			echo "guru tidak ditemukan.";
+		}
+	}
 	// public function hapus_siswa($id)
 	// {
 	// 	$this->m_model->delete('siswa', 'id_siswa', $id);
@@ -288,7 +425,7 @@ class Admin extends CI_Controller
 		$sheet->setCellValue('B3', 'Nama Siswa');
 		$sheet->setCellValue('C3', 'NISN');
 		$sheet->setCellValue('D3', 'Gender');
-		$sheet->setCellValue('E3', 'Kelas');
+		$sheet->setCellValue('E3', 'mapel');
 
 		$sheet->getStyle('A3')->applyFromArray($style_col);
 		$sheet->getStyle('B3')->applyFromArray($style_col);
@@ -393,6 +530,19 @@ class Admin extends CI_Controller
 			redirect(base_url('admin/siswa'));
 		} else {
 			echo 'Invalid File';
+		}
+	}
+	public function export_guru()
+	{
+		$data['data_guru'] = $this->m_model->get_data('guru')->result();
+		$data['nama'] = 'guru';
+		if ($this->uri->segment(3) == 'pdf') {
+			$this->load->library('pdf');
+			$this->pdf->load_view('admin/export_data_guru', $data);
+			$this->pdf->render();
+			$this->pdf->stream('data_guru.pdf', ['Attachment' => false]);
+		} else {
+			$this->load->view('admin/download_data_guru', $data);
 		}
 	}
 
